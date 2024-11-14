@@ -1,0 +1,12 @@
+# System files
+.DS_Store
+
+# Dependency directories
+node_modules/
+
+# dotenv environment variable files
+.env
+
+# IDE and editor directories
+.idea
+.vscode

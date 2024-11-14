@@ -1,0 +1,37 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model MessageTemplate {
+  id          Int      @id @default(autoincrement()) // 用途序列號主鍵
+  description String   @unique // 用途描述字串
+  updatedAt   DateTime @updatedAt // 更新時間
+  createdAt   DateTime @default(now()) // 創建時間
+
+  @@map("message_template")
+}
+
+model SendTask {
+  id          Int      @id @default(autoincrement()) // 序列號主鍵
+  jobDescribe String // 任務描述
+  mobile      String // 用戶手機號碼
+  coupon      String // 優惠代碼
+  messageId   Int // MessageTemplate ID
+  isSent      Boolean // 是否發送
+  updatedAt   DateTime @updatedAt // 更新時間
+  createdAt   DateTime @default(now()) // 創建時間
+
+  @@unique([jobDescribe, mobile, coupon])
+  @@map("send_task")
+}
