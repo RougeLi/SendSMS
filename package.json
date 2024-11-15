@@ -1,10 +1,11 @@
 {
   "name": "send-sms",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "send sms project",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "create-template": "node src/createMessageTemplateFromEnv.js",
+    "prepare-task-list": "node src/prepareSmsTaskListByFile.js",
+    "send-sms": "node src/sendSmsTaskHandler.js"
   },
   "keywords": [],
   "author": "",

@@ -1,11 +1,6 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
+  output   = "../src/lib/prisma-client"
 }
 
 datasource db {
@@ -14,24 +9,31 @@ datasource db {
 }
 
 model MessageTemplate {
-  id          Int      @id @default(autoincrement()) // 用途序列號主鍵
-  description String   @unique // 用途描述字串
-  updatedAt   DateTime @updatedAt // 更新時間
-  createdAt   DateTime @default(now()) // 創建時間
+  id          Int      @id @default(autoincrement()) // id 為自動增加的整數型別
+  description String   @unique // 模板訊息
+  updatedAt   DateTime @updatedAt @map("updated_at") // 更新時間
+  createdAt   DateTime @default(now()) @map("created_at") // 建立時間
 
   @@map("message_template")
 }
 
-model SendTask {
-  id          Int      @id @default(autoincrement()) // 序列號主鍵
-  jobDescribe String // 任務描述
-  mobile      String // 用戶手機號碼
-  coupon      String // 優惠代碼
-  messageId   Int // MessageTemplate ID
-  isSent      Boolean // 是否發送
-  updatedAt   DateTime @updatedAt // 更新時間
-  createdAt   DateTime @default(now()) // 創建時間
+enum SentStatus {
+  PENDING
+  IN_PROGRESS
+  SUCCESS
+  FAILED
+}
 
-  @@unique([jobDescribe, mobile, coupon])
+model SendTask {
+  taskId     String     @id @default(uuid()) @map("task_id") @db.Uuid // UUID 主鍵
+  taskTopic  String     @map("task_topic") // 任務主題
+  mobile     String     @db.VarChar(15) // 用戶手機號碼
+  coupon     String // 優惠代碼
+  messageId  Int        @map("message_id") // 模板訊息 id
+  sentStatus SentStatus @default(PENDING) @map("sent_status") // 發送狀態
+  updatedAt  DateTime   @updatedAt @map("updated_at") // 更新時間
+  createdAt  DateTime   @default(now()) @map("created_at") // 建立時間
+
+  @@unique([taskTopic, mobile, coupon])
   @@map("send_task")
 }

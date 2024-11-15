@@ -1,0 +1,13 @@
+services:
+  db:
+    image: postgres:latest
+    container_name: sms-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: sms_db
+      POSTGRES_USER: smsUser
+      POSTGRES_PASSWORD: smsPassword
+    volumes:
+      - ./db:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"

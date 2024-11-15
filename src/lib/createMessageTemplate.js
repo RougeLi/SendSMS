@@ -1,15 +1,15 @@
-const prisma = require('./prisma');
+const {prisma} = require('./prisma');
 
-async function checkExistingTemplate(description) {
-    return await prisma.messageTemplate.findUnique({
+function checkExistingTemplate(description) {
+    return prisma.messageTemplate.findUnique({
         where: {
             description,
         },
     })
 }
 
-async function createNewMessageTemplate(description) {
-    return await prisma.messageTemplate.create({
+function createNewMessageTemplate(description) {
+    return prisma.messageTemplate.create({
         data: {
             description,
         },
@@ -24,9 +24,13 @@ async function createNewMessageTemplate(description) {
  */
 module.exports = async (description) => {
     try {
-        if (await checkExistingTemplate(description)) return;
-
-        await createNewMessageTemplate(description)
+        const existingTemplate = await checkExistingTemplate(description);
+        if (existingTemplate) {
+            console.log('已存在的 MessageTemplate:', existingTemplate);
+            return;
+        }
+        await createNewMessageTemplate(description);
+        console.log('建立新的 MessageTemplate:', description);
     } catch (error) {
         console.error('建立 MessageTemplate 時發生錯誤:', error);
         throw error;

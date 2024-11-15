@@ -10,3 +10,6 @@ node_modules/
 # IDE and editor directories
 .idea
 .vscode
+
+# Prisma client files
+**/prisma-client
