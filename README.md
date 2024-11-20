@@ -7,6 +7,8 @@
 - [安裝](#安裝)
 - [使用方法](#使用方法)
 - [資料庫操作](#資料庫操作)
+- [發送模組說明](#發送模組說明)
+- [三竹簡訊模組配置說明](#三竹簡訊模組配置說明)
 - [開發](#開發)
 
 ## 安裝
@@ -113,6 +115,39 @@ npx prisma migrate deploy
 ```
 
 **警告：此操作會刪除所有資料。**
+
+## 發送模組說明
+
+配置環境變數 `SENDER_MODE` 決定使用的發送訊息模組。
+
+目前支援的發送訊息模組：
+
+- `ExampleSmsSender`: 範例模組，不會真的發送簡訊，會將訊息結果輸出至控制台。
+- `MitakeSmsSender`: 三竹簡訊模組，透過三竹簡訊API發送簡訊。
+
+## 三竹簡訊模組配置說明
+
+配置調用三竹簡訊API所需的參數，透過`config/mitake-sms-config.yaml`檔案提供。
+
+1. 在 `config` 目錄下，新增 `mitake-sms-config.yaml` 檔案。
+2. 設定以下參數：
+      ```yaml
+      # 三竹簡訊 API 網址
+      SmSendApiUrl: https://smsapi.mitake.com.tw/api/mtk/SmSend
+      # 編碼格式 (選填 - Big5/UTF-8 預設為 Big5)
+      CharsetURL: UTF-8
+      # 三竹簡訊帳號、密碼  
+      username: 三竹簡訊帳號
+      password: 三竹簡訊密碼
+      # 簡訊預約時間 (選填)
+      dlvtime: YYYYMMDDHHMMSS
+      # 簡訊有效期限 (選填)
+      vldtime: YYYYMMDDHHMMSS
+      # 狀態主動回報網址 (選填)
+      response: https://<domain>/sms/mitake/callback
+      # 預設值為0，若值等於1時，回覆結果會加上smsPoint，該筆簡訊的扣除點數。 (選填)
+      smsPointFlag: 1
+      ```
 
 ---
 

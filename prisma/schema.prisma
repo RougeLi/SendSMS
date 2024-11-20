@@ -37,3 +37,17 @@ model SendTask {
   @@unique([taskTopic, mobile, coupon])
   @@map("send_task")
 }
+
+model MitakeResponseLog {
+  sn           Int      @id @default(autoincrement()) // id 為自動增加的整數型別
+  clientId     String   @map("client_id") // 客戶端 ID，即為task_id
+  msgId        String?  @map("msg_id") @db.VarChar(20) // 簡訊序號，成功回應時存在
+  statusCode   String   @map("status_code") @db.VarChar(2) // 發送狀態碼
+  accountPoint Int?     @map("account_point") // 帳戶剩餘點數，成功回應時存在
+  duplicate    String?  @map("duplicate") @db.VarChar(2) // 是否為重複發送的簡訊，成功回應時才有機會存在
+  smsPoint     Int?     @map("sms_point") // 簡訊的扣除點數，成功回應時才有機會存在
+  error        String? // 錯誤訊息，失敗回應時存在
+  createdAt    DateTime @default(now()) @map("created_at") // 建立時間
+
+  @@map("mitake_response_log")
+}
