@@ -5,7 +5,11 @@
   "scripts": {
     "create-template": "node src/createMessageTemplateFromEnv.js",
     "prepare-task-list": "node src/prepareSmsTaskListByFile.js",
-    "send-sms": "node src/sendSmsTaskHandler.js"
+    "send-sms": "node src/sendSmsTaskHandler.js",
+    "prisma:generate": "npx prisma generate",
+    "prisma:migrate": "npx prisma migrate dev",
+    "prisma:deploy": "npx prisma migrate deploy",
+    "prisma:reset": "npx prisma migrate reset"
   },
   "keywords": [],
   "author": "",
