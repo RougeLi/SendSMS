@@ -3,11 +3,14 @@ const readline = require('readline');
 const {join} = require('path');
 const createSendTask = require('./lib/createSendTask');
 const colorText = require("./lib/colorText");
+const {getTaiwanLocalDateTimeString} = require("./lib/getLocalDateTimeString");
 
 // 設定檔案路徑
 const TASK_FILES_DIRECTORY = join(__dirname, '..', 'taskFiles');
 // 是否跳過優惠代碼模式
 const SKIP_COUPON_MODE = process.env.PREPARE_SKIP_COUPON_MODE === 'true';
+// 是否儲存重複的手機號碼
+const SAVE_DUPLICATE_MOBILE = process.env.PREPARE_SAVE_DUPLICATE_MOBILE === 'true';
 // 一次在記憶體中暫存多少筆再送到 createSendTask
 const CHUNK_READ_SIZE = 1000;
 // 用 Set 來記錄已經讀取過的手機號碼，避免重複
@@ -61,15 +64,8 @@ async function main() {
     }
 
     console.log(colorText('檔案處理完畢。', 'magenta'));
-    if (duplicateMobiles.length > 0) {
-        console.error(colorText(`有 ${duplicateMobiles.length} 筆重複的手機號碼`, 'yellow'));
-        const duplicateFileName = join(
-            TASK_FILES_DIRECTORY,
-            `${new Date().toISOString().replace(/:/g, '-')}-重複手機號碼.txt`
-        );
-        fs.writeFileSync(duplicateFileName, duplicateMobiles.join('\n'));
-        console.log(colorText(`重複手機號碼已存檔至: ${duplicateFileName}`, 'yellow'));
-    }
+
+    handleDuplicateMobiles(taskTopic);
 }
 
 function parseLineToSendTask(taskLine, taskTopic, messageId) {
@@ -140,4 +136,19 @@ function getTaskListLineReader(sendTaskListFilename) {
         input: fs.createReadStream(filePath),
         crlfDelay: Infinity,
     });
+}
+
+function handleDuplicateMobiles(taskTopic) {
+    if (duplicateMobiles.length > 0) {
+        console.error(colorText(`有 ${duplicateMobiles.length} 筆重複的手機號碼`, 'yellow'));
+        if (!SAVE_DUPLICATE_MOBILE) {
+            return;
+        }
+        const duplicateFileName = join(
+            TASK_FILES_DIRECTORY,
+            `${taskTopic}-${getTaiwanLocalDateTimeString()}-重複手機號碼.txt`
+        );
+        fs.writeFileSync(duplicateFileName, duplicateMobiles.join('\n'));
+        console.log(colorText(`重複手機號碼已存檔至: ${duplicateFileName}`, 'yellow'));
+    }
 }
