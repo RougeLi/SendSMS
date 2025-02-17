@@ -9,13 +9,18 @@ const {prisma, SENT_STATUS_PENDING} = require("./prisma");
  * @returns {Promise<void>}
  */
 async function sendMessages({messageMap, targetSendTasks, Sender}) {
-    const sendTasks = targetSendTasks.map(async (sendTask) => {
+    for (const sendTask of targetSendTasks) {
         const template = messageMap[sendTask.messageId];
         const description = replacePlaceholders(template, sendTask);
         await new Sender(sendTask, description).execute();
-    });
-
-    await Promise.allSettled(sendTasks);
+    }
+    // const sendTasks = targetSendTasks.map(async (sendTask) => {
+    //     const template = messageMap[sendTask.messageId];
+    //     const description = replacePlaceholders(template, sendTask);
+    //     await new Sender(sendTask, description).execute();
+    // });
+    //
+    // await Promise.allSettled(sendTasks);
 }
 
 /**
