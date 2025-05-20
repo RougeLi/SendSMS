@@ -3,24 +3,25 @@
   "version": "1.0.0",
   "description": "send sms project",
   "scripts": {
+    "install:ci": "pnpm install --frozen-lockfile",
+    "install:dev": "pnpm install --no-frozen-lockfile",
+    "update:dependencies": "pnpm update --latest",
     "create-template": "node src/createMessageTemplateFromEnv.js",
     "prepare-task-list": "node src/prepareSmsTaskListByFile.js",
     "send-sms": "node src/sendSmsTaskHandler.js",
-    "prisma:generate": "npx prisma generate",
-    "prisma:migrate": "npx prisma migrate dev",
-    "prisma:deploy": "npx prisma migrate deploy",
-    "prisma:reset": "npx prisma migrate reset"
+    "prisma:generate": "prisma generate",
+    "prisma:migrate": "prisma migrate dev",
+    "prisma:deploy": "prisma migrate deploy",
+    "prisma:reset": "prisma migrate reset"
   },
-  "keywords": [],
-  "author": "",
   "license": "ISC",
   "devDependencies": {
-    "prisma": "^5.22.0"
+    "prisma": "^6.8.2"
   },
   "dependencies": {
-    "@prisma/client": "^5.22.0",
-    "axios": "^1.7.7",
+    "@prisma/client": "^6.8.2",
+    "axios": "^1.9.0",
     "js-yaml": "^4.1.0",
-    "qs": "^6.13.1"
+    "qs": "^6.14.0"
   }
 }
