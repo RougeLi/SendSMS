@@ -9,6 +9,7 @@
 - [資料庫操作](#資料庫操作)
 - [發送模組說明](#發送模組說明)
 - [三竹簡訊模組配置說明](#三竹簡訊模組配置說明)
+- [teamplus簡訊模組配置說明](#teamplus簡訊模組配置說明)
 - [開發](#開發)
 
 ## 安裝
@@ -124,6 +125,7 @@ npx prisma migrate deploy
 
 - `ExampleSmsSender`: 範例模組，不會真的發送簡訊，會將訊息結果輸出至控制台。
 - `MitakeSmsSender`: 三竹簡訊模組，透過三竹簡訊API發送簡訊。
+- `TeamplusSmsSender`: teamplus簡訊模組，透過teamplus簡訊API發送簡訊。
 
 ## 三竹簡訊模組配置說明
 
@@ -147,6 +149,24 @@ npx prisma migrate deploy
       response: https://<domain>/sms/mitake/callback
       # 預設值為0，若值等於1時，回覆結果會加上smsPoint，該筆簡訊的扣除點數。 (選填)
       smsPointFlag: 1
+      ```
+
+## teamplus簡訊模組配置說明
+
+配置調用teamplus簡訊API所需的參數，透過`config/teamplus-sms-config.yaml`檔案提供。
+
+1. 在 `config` 目錄下，新增 `teamplus-sms-config.yaml` 檔案。
+2. 設定以下參數：
+      ```yaml
+      # teamplus簡訊 API 網址
+      SiteUrl: api.example.com
+      # 客戶代碼
+      custcode: customer123
+      # teamplus簡訊帳號、密碼
+      uid: username
+      pwd: password
+      # 簡訊有效期限 (分鐘)
+      retrytime: 1440
       ```
 
 ---

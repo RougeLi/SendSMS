@@ -51,3 +51,18 @@ model MitakeResponseLog {
 
   @@map("mitake_response_log")
 }
+
+model TeamplusResponseLog {
+  sn          Int      @id @default(autoincrement()) // id 為自動增加的整數型別
+  clientId    String   @map("client_id") // 客戶端 ID，即為task_id
+  status      String   @map("status") @db.VarChar(3) // 回應狀態碼
+  message     String   @map("message") // 回應訊息
+  batchid     String?  @map("batch_id") // 批次ID，成功回應時存在
+  credit      String?  @map("credit") // 帳戶剩餘點數，成功回應時存在
+  sendcnt     String?  @map("send_cnt") // 發送筆數，成功回應時存在
+  reducepoint String?  @map("reduce_point") // 扣除點數，成功回應時存在
+  unsendcnt   String?  @map("unsend_cnt") // 未發送筆數，成功回應時存在
+  createdAt   DateTime @default(now()) @map("created_at") // 建立時間
+
+  @@map("teamplus_response_log")
+}
